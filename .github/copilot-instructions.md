@@ -72,6 +72,10 @@ TripDetails is a Django application for managing sightseeing trips with destinat
 | Name | Path | View |
 |---|---|---|
 | `destinations:trip_list` | `/` | `TripListView` |
+| `destinations:trip_create` | `/trip/new/` | `TripCreateView` |
+| `destinations:trip_detail` | `/trip/<pk>/` | `TripDetailView` |
+| `destinations:trip_update` | `/trip/<pk>/edit/` | `TripUpdateView` |
+| `destinations:trip_delete` | `/trip/<pk>/delete/` | `TripDeleteView` |
 
 ## Templates
 
@@ -81,6 +85,9 @@ All templates live in the project-level `templates/` directory.
 |---|---|
 | `base.html` | Base layout — vendored Bootstrap, navbar, messages, blocks: `title`, `content`, `extra_js` |
 | `destinations/trip_list.html` | Home page — Bootstrap card grid of trips, empty state, "New Trip" button |
+| `destinations/trip_form.html` | Shared create/update form for Trip — breadcrumb, Bootstrap form, required field indicator |
+| `destinations/trip_detail.html` | Trip detail — destination card grid with primary photo thumbnails, edit/delete actions |
+| `destinations/trip_confirm_delete.html` | Delete confirmation — warns about cascading deletion of destinations |
 
 ## Code Style
 

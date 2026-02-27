@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Delete {{ object.name }} — TripDetails{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'destinations:trip_list' %}">Trips</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'destinations:trip_detail' object.pk %}">{{ object.name }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Delete</li>
+            </ol>
+        </nav>
+
+        <div class="card border-danger">
+            <div class="card-body">
+                <h1 class="h3 card-title text-danger mb-3">Delete Trip</h1>
+                <p class="card-text">
+                    Are you sure you want to delete <strong>{{ object.name }}</strong>?
+                </p>
+                {% with count=object.destinations.count %}
+                    {% if count %}
+                        <p class="text-danger small">
+                            This will also permanently delete
+                            <strong>{{ count }} destination{{ count|pluralize }}</strong>
+                            and all associated photos and distances.
+                        </p>
+                    {% endif %}
+                {% endwith %}
+                <form method="post" class="d-flex gap-2 mt-4">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Yes, delete trip</button>
+                    <a href="{% url 'destinations:trip_detail' object.pk %}" class="btn btn-outline-secondary">
+                        Cancel
+                    </a>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
