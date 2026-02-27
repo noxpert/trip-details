@@ -40,14 +40,14 @@
         {% for destination in destinations %}
             <div class="col">
                 <div class="card h-100 shadow-sm">
-                    {% for image in destination.images.all %}
-                        {% if image.is_primary %}
-                            <img src="{{ image.image.url }}"
+                    {% with primary_image=destination.primary_images|first %}
+                        {% if primary_image %}
+                            <img src="{{ primary_image.image.url }}"
                                  class="card-img-top object-fit-cover"
                                  style="height: 160px;"
-                                 alt="{{ image.caption|default:destination.name }}">
+                                 alt="{{ primary_image.caption|default:destination.name }}">
                         {% endif %}
-                    {% endfor %}
+                    {% endwith %}
                     <div class="card-body">
                         <h5 class="card-title mb-1">
                             {# destination_detail URL added in Prompt 4 #}

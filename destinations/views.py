@@ -1,9 +1,9 @@
-from django.db.models import Count
+from django.db.models import Count, Prefetch
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 
 from .forms import TripForm
-from .models import Destination, Trip
+from .models import Destination, DestinationImage, Trip
 
 
 class TripListView(ListView):
@@ -29,9 +29,14 @@ class TripDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        primary_images_prefetch = Prefetch(
+            'images',
+            queryset=DestinationImage.objects.filter(is_primary=True),
+            to_attr='primary_images',
+        )
         context['destinations'] = (
             Destination.objects.filter(trip=self.object)
-            .prefetch_related('images')
+            .prefetch_related(primary_images_prefetch)
             .order_by('sort_order', 'created_at')
         )
         return context
