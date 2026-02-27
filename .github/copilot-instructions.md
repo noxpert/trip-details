@@ -20,7 +20,9 @@ TripDetails is a Django application for managing sightseeing trips with destinat
 
 - Repo directory: `trip-details/` (hyphen - filesystem only)
 - Django settings package: `trip_details/` (underscore - Python import)
-- App: `destinations/` (to be created)
+- App: `destinations/` ✅ created
+- All templates go in the **project-level** `templates/` directory (NOT inside the app)
+- Migrations are excluded from ruff linting (`*/migrations/*.py`)
 
 ## Key Design Decisions
 
@@ -35,19 +37,34 @@ TripDetails is a Django application for managing sightseeing trips with destinat
 - **Bootstrap is vendored locally** - never use CDN links; reference via `{% static 'vendor/bootstrap/...' %}`
 - **Offline-first**: all data persisted in SQLite; only geocoding and route fetching need internet
 - **Images stored locally** in `MEDIA_ROOT`
+- **Destinations ordered** by `sort_order` then `created_at`; drag-and-drop reordering deferred
 
-## Models (to be created in `destinations` app)
+## Models ✅ Created in `destinations` app
 
-- **Trip** - name, description, timestamps
-- **Destination** - FK to Trip, name, description, address, lat, lon, timestamps
-- **DestinationImage** - FK to Destination, image file, is_primary, caption, sort_order
-- **DestinationDistance** - from_destination, to_destination, haversine_distance_km, driving_distance_km, driving_duration_minutes, directions_json (JSONField)
+- **Trip** - `name`, `description`, `created_at`, `updated_at`
+  - `__str__`: returns `name`
+  - Default ordering: `-created_at`
+- **Destination** - FK to Trip (`related_name='destinations'`), `name`, `description`, `address`, `latitude`, `longitude`, `sort_order`, `created_at`, `updated_at`
+  - `__str__`: returns `name`
+  - Default ordering: `['sort_order', 'created_at']`
+- **DestinationImage** - FK to Destination (`related_name='images'`), `image` (ImageField, `upload_to='destinations/'`), `is_primary`, `caption`, `sort_order`
+  - `__str__`: returns caption or `"Image for {destination.name}"`
+- **DestinationDistance** - `from_destination` FK (`related_name='distances_from'`), `to_destination` FK (`related_name='distances_to'`), `haversine_distance_km`, `driving_distance_km`, `driving_duration_minutes`, `directions_json` (JSONField)
+  - `UniqueConstraint` on `(from_destination, to_destination)` named `unique_destination_pair`
+  - `__str__`: returns `"From → To"`
+
+## Settings Notes
+
+- `STATIC_ROOT = BASE_DIR / 'staticfiles'` — required by WhiteNoise's `CompressedManifestStaticFilesStorage`
+- `staticfiles/` and `media/` are in `.gitignore`
+- WhiteNoise does **not** serve media files; dev media serving uses `django.conf.urls.static`
 
 ## Code Style
 
 - **Linting/formatting**: ruff
 - **Testing**: pytest with pytest-django
 - **Configuration**: django-environ, all secrets in `.env`
+- Migrations are excluded from ruff lint rules
 
 ## Development Commands
 
