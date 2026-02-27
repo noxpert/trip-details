@@ -47,17 +47,40 @@ TripDetails is a Django application for managing sightseeing trips with destinat
 - **Destination** - FK to Trip (`related_name='destinations'`), `name`, `description`, `address`, `latitude`, `longitude`, `sort_order`, `created_at`, `updated_at`
   - `__str__`: returns `name`
   - Default ordering: `['sort_order', 'created_at']`
+  - `CheckConstraint`: latitude in [-90, 90], longitude in [-180, 180]
 - **DestinationImage** - FK to Destination (`related_name='images'`), `image` (ImageField, `upload_to='destinations/'`), `is_primary`, `caption`, `sort_order`
   - `__str__`: returns caption or `"Image for {destination.name}"`
+  - `UniqueConstraint`: at most one `is_primary=True` per destination
+  - `clean()`: validates the single-primary rule with a user-friendly error
 - **DestinationDistance** - `from_destination` FK (`related_name='distances_from'`), `to_destination` FK (`related_name='distances_to'`), `haversine_distance_km`, `driving_distance_km`, `driving_duration_minutes`, `directions_json` (JSONField)
   - `UniqueConstraint` on `(from_destination, to_destination)` named `unique_destination_pair`
+  - `CheckConstraint`: no self-referencing distances (`from != to`)
+  - `clean()`: validates both destinations belong to the same trip
   - `__str__`: returns `"From → To"`
 
 ## Settings Notes
 
 - `STATIC_ROOT = BASE_DIR / 'staticfiles'` — required by WhiteNoise's `CompressedManifestStaticFilesStorage`
 - `staticfiles/` and `media/` are in `.gitignore`
-- WhiteNoise does **not** serve media files; dev media serving uses `django.conf.urls.static`
+- WhiteNoise does **not** serve media files; dev media serving uses `django.conf.urls.static` guarded by `if settings.DEBUG`
+
+## URLs
+
+- Root URLconf: `trip_details/urls.py` — includes `destinations.urls` at `''`; media serving via `static()` helper when `DEBUG=True`
+- App URLconf: `destinations/urls.py` with `app_name = 'destinations'`
+
+| Name | Path | View |
+|---|---|---|
+| `destinations:trip_list` | `/` | `TripListView` |
+
+## Templates
+
+All templates live in the project-level `templates/` directory.
+
+| Template | Description |
+|---|---|
+| `base.html` | Base layout — vendored Bootstrap, navbar, messages, blocks: `title`, `content`, `extra_js` |
+| `destinations/trip_list.html` | Home page — Bootstrap card grid of trips, empty state, "New Trip" button |
 
 ## Code Style
 

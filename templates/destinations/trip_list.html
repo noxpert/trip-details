@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}TripDetails — Trips{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2 mb-0">My Trips</h1>
+    {# trip_create URL added in Prompt 3 #}
+    <a href="#" class="btn btn-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg me-1" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"></path>
+        </svg>
+        New Trip
+    </a>
+</div>
+
+{% if object_list %}
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+        {% for trip in object_list %}
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {# trip_detail URL added in Prompt 3 #}
+                            <span class="text-decoration-none">{{ trip.name }}</span>
+                        </h5>
+                        {% if trip.description %}
+                            <p class="card-text text-muted small">{{ trip.description|truncatewords:20 }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="card-footer d-flex justify-content-between align-items-center text-muted small">
+                        <span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-geo-alt me-1" viewBox="0 0 16 16">
+                                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"></path>
+                                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6"></path>
+                            </svg>
+                            {{ trip.destination_count }} destination{{ trip.destination_count|pluralize }}
+                        </span>
+                        <span>{{ trip.created_at|date:"M j, Y" }}</span>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="text-center py-5">
+        <p class="text-muted fs-5 mb-3">No trips yet — create one!</p>
+        {# trip_create URL added in Prompt 3 #}
+        <a href="#" class="btn btn-primary btn-lg">
+            Create your first trip
+        </a>
+    </div>
+{% endif %}
+{% endblock %}
+
