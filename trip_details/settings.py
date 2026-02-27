@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'destinations',
 ]
 
 MIDDLEWARE = [
@@ -91,22 +92,9 @@ DATABASES = {
 
 
 # Password validation
+# Not used — this is a single-user app with no authentication.
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
-
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
+AUTH_PASSWORD_VALIDATORS = []
 
 
 # Internationalization
@@ -126,6 +114,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 STORAGES = {
     'staticfiles': {
@@ -153,8 +142,7 @@ ORS_API_KEY = env('ORS_API_KEY', default='')
 # Distance display settings
 # All distances are stored in kilometers in the database.
 # DISTANCE_UNIT controls how distances are displayed in the UI.
-# Accepted values: 'km' or 'miles'
-
+# Accepted values: 'km' or 'miles'. Default 'km' is declared in environ.Env() above.
 DISTANCE_UNIT = env('DISTANCE_UNIT')
 KM_TO_MILES = 0.621371
 
