@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+.venv/
+venv/
+env/
+
+# Django
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+*.log
+
+# Environment
+.env
+
+# JetBrains (PyCharm / IntelliJ)
+.idea/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Ruff
+.ruff_cache/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Do NOT ignore vendored Bootstrap — it should be committed
+# static/vendor/bootstrap/
+

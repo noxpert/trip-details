@@ -1,0 +1,39 @@
+[project]
+name = "trip-details"
+version = "0.1.0"
+description = "A Django application for managing sightseeing trips with photos, distances, and driving directions."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.14,<4"
+dependencies = [
+    "django>=6.0.2",
+    "Pillow>=11.0",
+    "requests>=2.32",
+    "openrouteservice>=2.3",
+    "django-environ>=0.12",
+    "whitenoise>=6.8",
+]
+
+[tool.poetry]
+packages = []
+
+[tool.poetry.group.dev.dependencies]
+pytest = ">=8.0"
+pytest-django = ">=4.9"
+ruff = ">=0.9"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "trip_details.settings"
+pythonpath = ["."]
+
+[tool.ruff]
+target-version = "py314"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+
+[build-system]
+requires = ["poetry-core>=2.0"]
+build-backend = "poetry.core.masonry.api"
+
