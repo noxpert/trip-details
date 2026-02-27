@@ -92,7 +92,10 @@ DATABASES = {
 
 
 # Password validation
-# Not used — this is a single-user app with no authentication.
+# This is a single-user app with no user-facing authentication or sign-up.
+# The Django admin is still protected by the superuser account; password
+# validators are intentionally left empty here because the superuser is
+# created once via `make superuser` by the developer, not through a form.
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = []
 
